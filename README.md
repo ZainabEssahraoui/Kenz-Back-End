@@ -7,3 +7,4 @@ REST API built with Express and MongoDB.
 ```bash
 npm install
 npm run dev
+# Kenz
