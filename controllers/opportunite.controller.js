@@ -32,7 +32,6 @@ exports.create = async (req, res) => {
   }
 };
 
-
 /*
 |--------------------------------------------------------------------------
 | READ - LIST (Angular cards)
@@ -63,6 +62,27 @@ exports.getAll = async (req, res) => {
 |--------------------------------------------------------------------------
 */
 /// Nadia Get details of a specific opportunite by ID(show the rest af champs in every opportunity)
+
+/*
+|--------------------------------------------------------------------------
+| READ - DETAILS
+| GET /opportunites/:id
+|--------------------------------------------------------------------------
+*/
+exports.getDetails = async (req, res) => {
+  try {
+    const opportunite = await Opportunite.findById(req.params.id);
+
+    if (!opportunite) {
+      return res.status(404).json({ error: "Opportunité introuvable" });
+    }
+
+    // Mongoose discriminator automatically returns the correct type
+    res.json(opportunite);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 /*
 
