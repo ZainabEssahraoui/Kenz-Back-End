@@ -4,7 +4,9 @@ const controller = require("../controllers/opportunite.controller");
 
 router.post("/", controller.create);
 router.get("/", controller.getAll);
+router.get("/formations/filter", controller.filterFormations);
 
+router.get("/search", controller.searchByTitre);
 router.get("/:id", controller.getDetails);
 
 router.put("/:id", controller.update);

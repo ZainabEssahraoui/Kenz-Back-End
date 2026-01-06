@@ -12,7 +12,6 @@ const Evenement = require("../models/Evenement");
 exports.create = async (req, res) => {
   try {
     const { type, ...data } = req.body;
-
     let opportunite;
 
     if (type === "Bourse") {
@@ -114,6 +113,73 @@ exports.remove = async (req, res) => {
   try {
     await Opportunite.findByIdAndDelete(req.params.id);
     res.json({ message: "Opportunite deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| SEARCH - by titre
+| GET /opportunites/search?q=l
+|--------------------------------------------------------------------------
+*/
+exports.searchByTitre = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q) {
+      return res.status(400).json({ error: "Mot clé requis" });
+    }
+
+    const opportunites = await Opportunite.find({
+      titre: {
+        $regex: "^" + q,      // commence par la lettre
+        $options: "i"         // insensible à la casse (L = l)
+      }
+    })
+      .select("titre description image type")
+      .sort({ createdAt: -1 });
+
+    res.json(opportunites);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+/*
+|--------------------------------------------------------------------------
+| FILTER - Formations
+| GET /opportunites/formations/filter
+|--------------------------------------------------------------------------
+| Query params:
+| - mode_apprentissage
+| - statut_financier
+|--------------------------------------------------------------------------
+*/
+exports.filterFormations = async (req, res) => {
+  try {
+    const { mode_apprentissage, statut_financier } = req.query;
+
+    const filter = {
+      type: "Formation"
+    };
+
+    if (mode_apprentissage) {
+      filter.mode_apprentissage = mode_apprentissage;
+    }
+
+    if (statut_financier) {
+      filter.statut_financier = statut_financier;
+    }
+
+    const formations = await Opportunite.find(filter)
+      .sort({ createdAt: -1 });
+
+    res.json(formations);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
