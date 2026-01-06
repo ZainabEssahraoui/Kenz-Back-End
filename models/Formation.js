@@ -10,14 +10,13 @@ const FormationSchema = new mongoose.Schema({
   },
   mode_apprentissage: {
     type: String,
-    enum: [" distance", "presentiel"],
+    enum: ["distance", "presentiel"]
   },
   statut_financier: {
     type: String,
-    enum: ["free", "paid"],
+    enum: ["free", "paid"]
   },
   duree: String
-  
 });
 
 module.exports = Opportunite.discriminator("Formation", FormationSchema);
