@@ -2,6 +2,8 @@ const Opportunite = require("../models/Opportunite");
 const Bourse = require("../models/Bourse");
 const Formation = require("../models/Formation");
 const Evenement = require("../models/Evenement");
+const { notifyNewOpportunity } = require("../utils/notificationTrigger");
+
 
 /*
 |--------------------------------------------------------------------------
@@ -9,10 +11,10 @@ const Evenement = require("../models/Evenement");
 | POST /Opportunity /opportunites?type=Bourse
 |--------------------------------------------------------------------------
 */
+
 exports.create = async (req, res) => {
   try {
     const { type, ...data } = req.body;
-
     let opportunite;
 
     if (type === "Bourse") {
@@ -26,11 +28,16 @@ exports.create = async (req, res) => {
     }
 
     await opportunite.save();
+
+    // TRIGGER notification création
+    await notifyNewOpportunity(opportunite);
+
     res.status(201).json(opportunite);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
 
 /*
 |--------------------------------------------------------------------------
@@ -93,11 +100,21 @@ exports.getDetails = async (req, res) => {
 */
 exports.update = async (req, res) => {
   try {
+    if (req.body.type) {
+      return res.status(403).json({
+        error: "La modification du type est interdite"
+      });
+    }
+
     const opportunite = await Opportunite.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      {
+        new: true,
+        runValidators: true
+      }
     );
+
     res.json(opportunite);
   } catch (err) {
     res.status(400).json({ error: err.message });
