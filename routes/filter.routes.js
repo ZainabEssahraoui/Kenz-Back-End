@@ -7,5 +7,9 @@ router.get("/bourses", filterController.filterBourses);
 
 // Evenement filter route
 router.get("/evenements", filterController.filterEvenements);
+//formation filtre route
+router.get("/formations", filterController.filterFormations);
+//serch opportunité
+router.get("/search", filterController.searchByTitre);
 
 module.exports = router;

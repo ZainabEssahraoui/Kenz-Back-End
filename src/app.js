@@ -18,7 +18,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('SERVER WORKS');
 });
-
+//les rourtes des différentes fonctionnalités
 app.use("/api/favoris", favoriRoutes);
 app.use("/api/opportunites", opportuniteRoutes);
 app.use("/api/auth", authRoutes);
