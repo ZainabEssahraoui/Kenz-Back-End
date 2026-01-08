@@ -113,6 +113,18 @@ exports.login = async (req, res) => {
   }
 };
 
+/* LOGOUT */
+exports.logout = async (req, res) => {
+  try {
+    res.json({
+      message: "Déconnecté avec succès",
+      redirect: "/login"
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 /* COMPLETE PROFILE */
 exports.completeProfile = async (req, res) => {
   try {
@@ -159,30 +171,57 @@ exports.completeProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { educationLevel, studyDomain, phone, destinationContinent, secondaryDomain } = req.body;
+    const {
+      educationLevel,
+      studyDomain,
+      phone,
+      destinationContinent,
+      secondaryDomain
+    } = req.body;
+
+    // 🔐 Sécurité : user connecté ≠ user modifié
+    if (req.user.role !== "admin" && req.user.id !== userId) {
+      return res.status(403).json({ message: "Accès interdit" });
+    }
 
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     if (user.role !== "user") {
       return res.status(403).json({ message: "Admins do not have profiles" });
     }
 
+    // Mise à jour des champs
     user.profile.educationLevel = educationLevel || user.profile.educationLevel;
     user.profile.studyDomain = studyDomain || user.profile.studyDomain;
     user.profile.phone = phone || user.profile.phone;
-    user.profile.destinationContinent = destinationContinent || user.profile.destinationContinent;
-    user.profile.secondaryDomain = secondaryDomain || user.profile.secondaryDomain;
+    user.profile.destinationContinent =
+      destinationContinent || user.profile.destinationContinent;
+    user.profile.secondaryDomain =
+      secondaryDomain || user.profile.secondaryDomain;
 
-    const profileFields = ["educationLevel", "studyDomain", "phone", "destinationContinent", "secondaryDomain"];
+    // Recalcul profileCompletion
+    const profileFields = [
+      "educationLevel",
+      "studyDomain",
+      "phone",
+      "destinationContinent",
+      "secondaryDomain"
+    ];
+
     let filledFields = 0;
-
     profileFields.forEach(field => {
       const value = user.profile[field];
-      if (typeof value === "string" && value.trim() !== "") filledFields++;
+      if (typeof value === "string" && value.trim() !== "") {
+        filledFields++;
+      }
     });
 
-    user.profileCompletion = Math.round((filledFields / profileFields.length) * 100);
+    user.profileCompletion = Math.round(
+      (filledFields / profileFields.length) * 100
+    );
 
     await user.save();
 
@@ -198,19 +237,18 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+
 /* GET USER */
 exports.getUser = async (req, res) => {
   try {
-    const userId = req.params.id.trim(); // supprime les espaces invisibles
-    console.log("Requested user ID:", userId);
+    const requestedId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
+    // 🔐 Protection
+    if (req.user.role !== "admin" && req.user.id !== requestedId) {
+      return res.status(403).json({ message: "Accès interdit" });
     }
 
-    const user = await User.findById(userId);
-    console.log("Found user:", user);
-
+    const user = await User.findById(requestedId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json({
@@ -219,8 +257,8 @@ exports.getUser = async (req, res) => {
       lastName: user.lastName,
       profileCompletion: user.profileCompletion
     });
+
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
