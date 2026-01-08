@@ -52,23 +52,13 @@ exports.getAll = async (req, res) => {
       filter.type = req.query.type;
     }
 
-    const opportunites = await Opportunite.find(filter)
-      .select("titre description image type")
-      .sort({ createdAt: -1 });
+    const opportunites = await Opportunite.find(filter).sort({ createdAt: -1 });
 
     res.json(opportunites);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
-/*
-|--------------------------------------------------------------------------
-| READ - DETAILS
-| GET /opportunites/:id
-|--------------------------------------------------------------------------
-*/
-/// Nadia Get details of a specific opportunite by ID(show the rest af champs in every opportunity)
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +74,6 @@ exports.getDetails = async (req, res) => {
       return res.status(404).json({ error: "Opportunité introuvable" });
     }
 
-    // Mongoose discriminator automatically returns the correct type
     res.json(opportunite);
   } catch (err) {
     res.status(500).json({ error: err.message });

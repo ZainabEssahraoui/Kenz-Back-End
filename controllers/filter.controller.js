@@ -1,50 +1,90 @@
 const Opportunite = require("../models/Opportunite");
+const {
+  applySearch,
+  filterByPays,
+  filterBySubject,
+  filterByEventDate,
+  filterByNiveau,
+  filterClosingSoon,
+  filterByFormat,
+  filterByPrice
+} = require("../utils/filter.util");
 
-/**
- * Filter Bourses by pays and filiere
- */
-exports.filterBourses = async (req, res) => {
+/* =======================
+   EVENTS
+======================= */
+
+exports.filterEvents = async (req, res) => {
   try {
-    const { pays, filiere } = req.query;
-    const filter = { type: "Bourse" };
+    const { search, filiere, pays, date } = req.query;
 
-    if (pays) filter.pays = pays;
-    if (filiere) filter.filiere = filiere;
+    let filter = { type: "Evenement" };
 
-    const bourses = await Opportunite.find(filter)
-      .select("titre description image pays filiere")
-      .sort({ createdAt: -1 });
+    applySearch(filter, search);
+    filterBySubject(filter, filiere);
+    filterByPays(filter, pays);
+    filterByEventDate(filter, date);
 
-    res.json(bourses);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const events = await Opportunite.find(filter).sort({ dateDebut: 1 });
+
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: "Event filtering failed" });
   }
 };
 
-/**
- * Filter Evenements by pays and dateDebut
- */
-exports.filterEvenements = async (req, res) => {
+/* =======================
+   BOURSES
+======================= */
+
+exports.filterBourses = async (req, res) => {
   try {
-    const { pays, dateDebut } = req.query;
-    const filter = { type: "Evenement" };
+    const { search, filiere, pays, niveau, closingSoon } = req.query;
 
-    if (pays) filter.pays = pays;
-    if (dateDebut) filter.dateDebut = { $gte: new Date(dateDebut) };
+    let filter = { type: "Bourse" };
 
-    const evenements = await Opportunite.find(filter)
-      .select("titre description image pays dateDebut dateFin lieu")
-      .sort({ dateDebut: 1 });
+    applySearch(filter, search);
+    filterBySubject(filter, filiere);
+    filterByPays(filter, pays);
+    filterByNiveau(filter, niveau);
 
-    res.json(evenements);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (closingSoon === "true") {
+      filterClosingSoon(filter);
+    }
+
+    const bourses = await Opportunite.find(filter).sort({ dateLimite: 1 });
+
+    res.status(200).json(bourses);
+  } catch (error) {
+    res.status(500).json({ message: "Bourse filtering failed" });
+  }
+};
+
+/* =======================
+   FORMATIONS
+======================= */
+
+exports.filterFormations = async (req, res) => {
+  try {
+    const { search, format, price } = req.query;
+
+    let filter = { type: "Formation" };
+
+    applySearch(filter, search);
+    filterByFormat(filter, format);
+    filterByPrice(filter, price);
+
+    const formations = await Opportunite.find(filter).sort({ createdAt: -1 });
+
+    res.status(200).json(formations);
+  } catch (error) {
+    res.status(500).json({ message: "Formation filtering failed" });
   }
 };
 
 /*
 |--------------------------------------------------------------------------
-| SEARCH - by titre
+| SEARCH  HOME- by titre
 | GET /opportunites/search?q=l
 |--------------------------------------------------------------------------
 */
@@ -61,48 +101,9 @@ exports.searchByTitre = async (req, res) => {
         $regex: "^" + q,      // commence par la lettre
         $options: "i"         // insensible à la casse (L = l)
       }
-    })
-      .select("titre description image type")
-      .sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 });
 
     res.json(opportunites);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-
-
-/*
-|--------------------------------------------------------------------------
-| FILTER - Formations
-| GET /opportunites/formations/filter
-|--------------------------------------------------------------------------
-| Query params:
-| - mode_apprentissage
-| - statut_financier
-|--------------------------------------------------------------------------
-*/
-exports.filterFormations = async (req, res) => {
-  try {
-    const { mode_apprentissage, statut_financier } = req.query;
-
-    const filter = {
-      type: "Formation"
-    };
-
-    if (mode_apprentissage) {
-      filter.mode_apprentissage = mode_apprentissage;
-    }
-
-    if (statut_financier) {
-      filter.statut_financier = statut_financier;
-    }
-
-    const formations = await Opportunite.find(filter)
-      .sort({ createdAt: -1 });
-
-    res.json(formations);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -2,10 +2,9 @@ const Opportunite = require("./Opportunite");
 const mongoose = require("mongoose");
 
 const BourseSchema = new mongoose.Schema({
-  montant: Number,
-  filiere: {
-    type: String,
-  },
+  //value
+  montant:{ type: Number }, 
+  //level 
   niveau_academique: {
     type: String,
     enum: [
@@ -14,8 +13,7 @@ const BourseSchema = new mongoose.Schema({
       "Doctorat",
       "Ingénieur"
     ] 
-  }, 
-  organisme: String
+  }
 });
 
 module.exports = Opportunite.discriminator("Bourse", BourseSchema);
