@@ -6,6 +6,7 @@ const authRoutes = require("../routes/auth.routes");
 const favoriRoutes = require("../routes/favori.routes");
 const notificationRoutes=require("../routes/notification.routes");
 const filtreRoutes = require("../routes/filter.routes");
+const adminRoutes = require("../routes/admin.routes");
 
 require("../cron/deadlineNotification");
 
@@ -24,5 +25,6 @@ app.use("/api/opportunites", opportuniteRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/filters", filtreRoutes);
+app.use("/api/admin", adminRoutes);
 
 module.exports = app;
