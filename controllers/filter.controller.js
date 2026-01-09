@@ -18,7 +18,7 @@ exports.filterEvents = async (req, res) => {
   try {
     const { search, filiere, pays, date } = req.query;
 
-    let filter = { opportuniteType: "Evenement" };
+    let filter = { type: "Evenement" };
 
     applySearch(filter, search);
     filterBySubject(filter, filiere);
@@ -41,7 +41,7 @@ exports.filterBourses = async (req, res) => {
   try {
     const { search, filiere, pays, niveau, closingSoon } = req.query;
 
-    let filter = { opportuniteType: "Bourse" };
+    let filter = { type: "Bourse" };
 
     applySearch(filter, search);
     filterBySubject(filter, filiere);
@@ -68,7 +68,7 @@ exports.filterFormations = async (req, res) => {
   try {
     const { search, format, price } = req.query;
 
-    let filter = { opportuniteType: "Formation" };
+    let filter = { type: "Formation" };
 
     applySearch(filter, search);
     filterByFormat(filter, format);
