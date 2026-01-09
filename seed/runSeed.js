@@ -17,6 +17,7 @@ const runSeed = async () => {
     await Opportunite.insertMany(data);
     console.log(" Seed data inserted successfully");
 
+    
     process.exit(0);
   } catch (error) {
     console.error(" Seed error:", error);

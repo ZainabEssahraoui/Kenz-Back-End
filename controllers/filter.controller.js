@@ -18,7 +18,7 @@ exports.filterEvents = async (req, res) => {
   try {
     const { search, filiere, pays, date } = req.query;
 
-    let filter = { type: "Evenement" };
+    let filter = { opportuniteType: "Evenement" };
 
     applySearch(filter, search);
     filterBySubject(filter, filiere);
@@ -41,7 +41,7 @@ exports.filterBourses = async (req, res) => {
   try {
     const { search, filiere, pays, niveau, closingSoon } = req.query;
 
-    let filter = { type: "Bourse" };
+    let filter = { opportuniteType: "Bourse" };
 
     applySearch(filter, search);
     filterBySubject(filter, filiere);
@@ -68,7 +68,7 @@ exports.filterFormations = async (req, res) => {
   try {
     const { search, format, price } = req.query;
 
-    let filter = { type: "Formation" };
+    let filter = { opportuniteType: "Formation" };
 
     applySearch(filter, search);
     filterByFormat(filter, format);
@@ -85,21 +85,21 @@ exports.filterFormations = async (req, res) => {
 /*
 |--------------------------------------------------------------------------
 | SEARCH  HOME- by titre
-| GET /opportunites/search?q=l
+| GET /opportunites/search?titre=l
 |--------------------------------------------------------------------------
 */
 exports.searchByTitre = async (req, res) => {
   try {
-    const { q } = req.query;
+    const { titre } = req.query;
 
-    if (!q) {
+    if (!titre) {
       return res.status(400).json({ error: "Mot clé requis" });
     }
 
     const opportunites = await Opportunite.find({
       titre: {
-        $regex: "^" + q,      // commence par la lettre
-        $options: "i"         // insensible à la casse (L = l)
+        $regex: "^" + titre,   // commence par la lettre
+        $options: "i"          // insensible à la casse
       }
     }).sort({ createdAt: -1 });
 

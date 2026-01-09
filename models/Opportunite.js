@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
 const options = {
-  discriminatorKey: "type", // important
+  //discriminatorKey: "type", // important
   timestamps: true
 };
 
 const OpportuniteSchema = new mongoose.Schema(
   {
+    opportuniteType: { type: String },
     titre: { type: String },
     description: { type: String },
 
@@ -32,4 +33,5 @@ const OpportuniteSchema = new mongoose.Schema(
   options
 );
 
-module.exports = mongoose.model("Opportunite", OpportuniteSchema);
+module.exports = mongoose.model("Opportunite", OpportuniteSchema,
+  "opportunites");

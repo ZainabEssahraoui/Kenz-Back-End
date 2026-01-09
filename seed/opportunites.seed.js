@@ -1,7 +1,7 @@
 module.exports = [
     // ========================= BOURSES =========================
     {
-      type: "Bourse",
+      opportuniteType: "Bourse",
       titre: "Bourse Master Informatique",
       description: "Bourse complète pour étudiants en informatique.",
       image: "https://picsum.photos/400/200",
@@ -22,7 +22,7 @@ module.exports = [
       pays: "France"
     },
     {
-      type: "Bourse",
+      opportuniteType: "Bourse",
       titre: "Bourse Doctorat IA",
       description: "Programme doctoral en intelligence artificielle.",
       image: "https://picsum.photos/400/201",
@@ -45,7 +45,7 @@ module.exports = [
   
     // ========================= EVENEMENTS =========================
     {
-      type: "Evenement",
+      opportuniteType: "Evenement",
       titre: "Web Dev Conference 2026",
       description: "Conférence internationale de développement web.",
       image: "https://picsum.photos/400/202",
@@ -66,7 +66,7 @@ module.exports = [
       lieu: "Berlin"
     },
     {
-      type: "Evenement",
+      opportuniteType: "Evenement",
       titre: "Data Science Summit",
       description: "Sommet sur la data science et le big data.",
       image: "https://picsum.photos/400/203",
@@ -89,7 +89,7 @@ module.exports = [
   
     // ========================= FORMATIONS =========================
     {
-      type: "Formation",
+      opportuniteType: "Formation",
       titre: "Formation React JS",
       description: "Formation complète React pour débutants.",
       image: "https://picsum.photos/400/204",
@@ -111,7 +111,7 @@ module.exports = [
       pays: "Online"
     },
     {
-      type: "Formation",
+      opportuniteType: "Formation",
       titre: "Bootcamp Full Stack",
       description: "Formation intensive Full Stack MERN.",
       image: "https://picsum.photos/400/205",
@@ -133,7 +133,7 @@ module.exports = [
       pays: "Morocco"
     },
     {
-        type: "Evenement",
+        opportuniteType: "Evenement",
         titre: "Game Dev Expo",
         description: "Salon dédié à la création de jeux vidéo.",
         image: "https://source.unsplash.com/800x600/?videogame,gaming,developer",
@@ -156,7 +156,7 @@ module.exports = [
     
       // ========================= FORMATION =========================
       {
-        type: "Formation",
+        opportuniteType: "Formation",
         titre: "Formation React JS",
         description: "Formation complète React pour débutants.",
         image: "https://source.unsplash.com/800x600/?reactjs,javascript,code",
@@ -178,7 +178,7 @@ module.exports = [
         pays: "Online"
       },
       {
-        type: "Formation",
+        opportuniteType: "Formation",
         titre: "Bootcamp DevOps & Cloud",
         description: "Formation intensive DevOps et cloud computing.",
         image: "https://source.unsplash.com/800x600/?cloud-computing,devops,server",
@@ -200,7 +200,7 @@ module.exports = [
         pays: "UK"
       },
       {
-        type: "Formation",
+        opportuniteType: "Formation",
         titre: "Data Analytics avec Python",
         description: "Maîtrisez l'analyse de données de A à Z.",
         image: "https://source.unsplash.com/800x600/?python,data,chart",
@@ -222,7 +222,7 @@ module.exports = [
         pays: "Online"
       },
       {
-        type: "Formation",
+        opportuniteType: "Formation",
         titre: "Cybersécurité Offensive (Ethical Hacking)",
         description: "Apprenez à sécuriser les systèmes en les testant.",
         image: "https://source.unsplash.com/800x600/?security,hacker,code",
@@ -244,7 +244,7 @@ module.exports = [
         pays: "France"
       },
       {
-        type: "Formation",
+        opportuniteType: "Formation",
         titre: "Deep Learning Specialization",
         description: "Formation avancée sur les réseaux de neurones.",
         image: "https://source.unsplash.com/800x600/?neural-network,ai,machine",
