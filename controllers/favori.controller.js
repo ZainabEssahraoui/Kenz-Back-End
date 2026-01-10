@@ -71,7 +71,6 @@ exports.getUserFavoris = async (req, res) => {
   }
 };
 
-
 /* ===========================
    SUPPRIMER UN FAVORI
 =========================== */
