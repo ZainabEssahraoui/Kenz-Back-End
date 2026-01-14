@@ -128,9 +128,8 @@ exports.logout = async (req, res) => {
 /* COMPLETE PROFILE */
 exports.completeProfile = async (req, res) => {
   try {
-    const { userId, phone, destinationContinent, secondaryDomain } = req.body;
-
-    if (!userId) return res.status(400).json({ message: "userId is required" });
+    const { phone, destinationContinent, secondaryDomain } = req.body;
+    const userId = req.user.id; // <-- pris depuis le token
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
